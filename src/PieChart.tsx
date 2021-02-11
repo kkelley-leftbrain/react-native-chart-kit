@@ -17,6 +17,7 @@ export interface PieChartProps extends AbstractChartProps {
   hasLegend?: boolean;
   style?: Partial<ViewStyle>;
   avoidFalseZero?: boolean;
+  radius?: number;
 }
 
 type PieChartState = {};
@@ -35,7 +36,7 @@ class PieChart extends AbstractChart<PieChartProps, PieChartState> {
 
     const chart = Pie({
       center: this.props.center || [0, 0],
-      r: 0,
+      r: this.props.radius || 0,
       R: this.props.height / 2.5,
       data: this.props.data,
       accessor: x => {

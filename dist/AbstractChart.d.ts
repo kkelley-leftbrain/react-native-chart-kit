@@ -26,8 +26,10 @@ export interface AbstractChartConfig extends ChartConfig {
   stackedBar?: boolean;
   verticalLabelRotation?: number;
   formatXLabel?: (xLabel: string) => string;
+  verticalLabelsHeightPercentage?: number;
 }
 export declare type AbstractChartState = {};
+export declare const DEFAULT_X_LABELS_HEIGHT_PERCENTAGE = 0.75;
 declare class AbstractChart<
   IProps extends AbstractChartProps,
   IState extends AbstractChartState
@@ -88,9 +90,9 @@ declare class AbstractChart<
     skewY?: string | number;
     rotation?: string | number;
     vectorEffect?:
+      | "default"
       | "inherit"
       | "none"
-      | "default"
       | "non-scaling-stroke"
       | "nonScalingStroke"
       | "uri";
@@ -208,9 +210,9 @@ declare class AbstractChart<
     skewY?: string | number;
     rotation?: string | number;
     vectorEffect?:
+      | "default"
       | "inherit"
       | "none"
-      | "default"
       | "non-scaling-stroke"
       | "nonScalingStroke"
       | "uri";
@@ -328,9 +330,9 @@ declare class AbstractChart<
     skewY?: string | number;
     rotation?: string | number;
     vectorEffect?:
+      | "default"
       | "inherit"
       | "none"
-      | "default"
       | "non-scaling-stroke"
       | "nonScalingStroke"
       | "uri";
@@ -426,6 +428,7 @@ declare class AbstractChart<
       | "stackedBar"
       | "verticalLabelRotation"
       | "formatXLabel"
+      | "verticalLabelsHeightPercentage"
       | "backgroundGradientFrom"
       | "backgroundGradientFromOpacity"
       | "backgroundGradientTo"
@@ -460,7 +463,8 @@ declare class AbstractChart<
     horizontalOffset,
     stackedBar,
     verticalLabelRotation,
-    formatXLabel
+    formatXLabel,
+    verticalLabelsHeightPercentage
   }: Pick<
     AbstractChartConfig,
     | "labels"
@@ -472,29 +476,41 @@ declare class AbstractChart<
     | "stackedBar"
     | "verticalLabelRotation"
     | "formatXLabel"
+    | "verticalLabelsHeightPercentage"
   >) => JSX.Element[];
   renderVerticalLines: ({
     data,
     width,
     height,
     paddingTop,
-    paddingRight
+    paddingRight,
+    verticalLabelsHeightPercentage
   }: Pick<
     Pick<
       AbstractChartConfig,
-      "height" | "paddingRight" | "paddingTop" | "width" | "data"
+      | "height"
+      | "paddingRight"
+      | "paddingTop"
+      | "width"
+      | "data"
+      | "verticalLabelsHeightPercentage"
     >,
-    "height" | "paddingRight" | "paddingTop" | "width"
+    | "height"
+    | "paddingRight"
+    | "paddingTop"
+    | "width"
+    | "verticalLabelsHeightPercentage"
   > & {
     data: number[];
   }) => JSX.Element[];
   renderVerticalLine: ({
     height,
     paddingTop,
-    paddingRight
+    paddingRight,
+    verticalLabelsHeightPercentage
   }: Pick<
     AbstractChartConfig,
-    "height" | "paddingRight" | "paddingTop"
+    "height" | "paddingRight" | "paddingTop" | "verticalLabelsHeightPercentage"
   >) => JSX.Element;
   renderDefs: (
     config: Pick<

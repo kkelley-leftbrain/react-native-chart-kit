@@ -43,6 +43,12 @@ export interface StackedBarChartProps extends AbstractChartProps {
    */
   segments?: number;
   percentile?: boolean;
+  /**
+   * Percentage of the chart height, dedicated to vertical labels
+   * (space below chart)
+   */
+  verticalLabelsHeightPercentage?: number;
+  formatYLabel?: (yLabel: string) => string;
 }
 declare type StackedBarChartState = {};
 declare class StackedBarChart extends AbstractChart<
@@ -59,7 +65,8 @@ declare class StackedBarChart extends AbstractChart<
     paddingRight,
     border,
     colors,
-    stackedBar
+    stackedBar,
+    verticalLabelsHeightPercentage
   }: Pick<
     Pick<
       AbstractChartConfig,
@@ -84,6 +91,7 @@ declare class StackedBarChart extends AbstractChart<
       | "stackedBar"
       | "verticalLabelRotation"
       | "formatXLabel"
+      | "verticalLabelsHeightPercentage"
       | "backgroundGradientFrom"
       | "backgroundGradientFromOpacity"
       | "backgroundGradientTo"
@@ -106,7 +114,12 @@ declare class StackedBarChart extends AbstractChart<
       | "scrollableInfoOffset"
       | "scrollableInfoSize"
     >,
-    "height" | "paddingRight" | "paddingTop" | "width" | "stackedBar"
+    | "height"
+    | "paddingRight"
+    | "paddingTop"
+    | "width"
+    | "stackedBar"
+    | "verticalLabelsHeightPercentage"
   > & {
     border: number;
     colors: string[];

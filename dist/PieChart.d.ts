@@ -14,6 +14,7 @@ export interface PieChartProps extends AbstractChartProps {
   style?: Partial<ViewStyle>;
   avoidFalseZero?: boolean;
   radius?: number;
+  debug?: boolean;
 }
 declare type PieChartState = {};
 declare class PieChart extends AbstractChart<PieChartProps, PieChartState> {

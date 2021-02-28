@@ -18,6 +18,7 @@ export interface PieChartProps extends AbstractChartProps {
   style?: Partial<ViewStyle>;
   avoidFalseZero?: boolean;
   radius?: number;
+  debug?: boolean;
 }
 
 type PieChartState = {};
@@ -33,6 +34,13 @@ class PieChart extends AbstractChart<PieChartProps, PieChartState> {
     } = this.props;
 
     const { borderRadius = 0 } = style;
+    const debug = this.props.debug || false;
+    if (debug) {
+      console.log(
+        "Data passed to pie: ",
+        JSON.stringify(this.props.data, null, "\t")
+      );
+    }
 
     const chart = Pie({
       center: this.props.center || [0, 0],
@@ -43,11 +51,6 @@ class PieChart extends AbstractChart<PieChartProps, PieChartState> {
         return x[this.props.accessor];
       }
     });
-    console.log(
-      "inside the pie: ",
-      JSON.stringify(this.props.data, null, "\t")
-    );
-    console.log(this.props.accessor);
     const total = this.props.data.reduce((sum, item) => {
       return sum + item[this.props.accessor];
     }, 0);

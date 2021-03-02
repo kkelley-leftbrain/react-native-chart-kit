@@ -16,7 +16,7 @@ import {
   BarChart,
   ContributionGraph,
   LineChart,
-  PieChart,
+  PieChartRing,
   ProgressChart,
   StackedBarChart
 } from "./dist/";
@@ -128,9 +128,21 @@ export default class App extends React.Component {
             <ScrollView
               key={Math.random()}
               style={{
-                backgroundColor: chartConfig.backgroundColor
+                backgroundColor: chartConfig.backgroundColor,
+                paddingTop: 30
               }}
             >
+              <Text style={labelStyle}>Pie Ring Chart</Text>
+              <PieChartRing
+                data={pieChartData}
+                height={height}
+                width={width}
+                chartConfig={chartConfig}
+                accessor="population"
+                style={graphStyle}
+                backgroundColor="transparent"
+                paddingLeft="15"
+              />
               <Text style={labelStyle}>Bezier Line Chart</Text>
               <LineChart
                 bezier
@@ -199,17 +211,6 @@ export default class App extends React.Component {
                 height={220}
                 chartConfig={chartConfig}
                 percentile
-              />
-              <Text style={labelStyle}>Pie Chart</Text>
-              <PieChart
-                data={pieChartData}
-                height={height}
-                width={width}
-                chartConfig={chartConfig}
-                accessor="population"
-                style={graphStyle}
-                backgroundColor="transparent"
-                paddingLeft="15"
               />
               <Text style={labelStyle}>Line Chart</Text>
               <LineChart

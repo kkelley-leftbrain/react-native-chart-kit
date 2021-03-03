@@ -1,6 +1,4 @@
-import Pie from "paths-js/pie";
 import Segment from "./segment";
-import Linear from "paths-js/linear";
 import { sum, enhance } from "paths-js/ops";
 import React from "react";
 import { View, ViewStyle } from "react-native";
@@ -33,7 +31,7 @@ class PieChartRing extends AbstractChart<PieChartProps, PieChartState> {
       backgroundColor,
       absolute = false,
       hasLegend = true,
-      avoidFalseZero = false
+      avoidFalseZero = true
     } = this.props;
 
     const { borderRadius = 0 } = style;
@@ -47,7 +45,7 @@ class PieChartRing extends AbstractChart<PieChartProps, PieChartState> {
 
     const chart = genPaths(
       this.props.data,
-      this.props.accessor,
+      this.props.accessor, // something like 'total' or 'population', etc.
       this.props.center || [0, 0], //center
       this.props.radius || 0, //r
       this.props.height / 2.5, //R
@@ -57,7 +55,6 @@ class PieChartRing extends AbstractChart<PieChartProps, PieChartState> {
       return sum + item[this.props.accessor];
     }, 0);
 
-    console.log("new chart render");
     const paths = chart.paths.map((c, i) => {
       let value: string;
 
@@ -78,7 +75,7 @@ class PieChartRing extends AbstractChart<PieChartProps, PieChartState> {
           }
         }
       }
-      console.log("I'm c: ", c.path.path.print());
+
       return (
         <G key={Math.random()}>
           <Path
@@ -122,18 +119,6 @@ class PieChartRing extends AbstractChart<PieChartProps, PieChartState> {
       );
     });
 
-    const pathsG = (
-      <G
-        x={
-          this.props.width / 2 / 2 +
-          Number(this.props.paddingLeft ? this.props.paddingLeft : 0)
-        }
-        y={this.props.height / 2}
-      >
-        {paths}
-      </G>
-    );
-    // console.log("pathsG: ", pathsG);
     return (
       <View
         style={{
@@ -173,6 +158,8 @@ class PieChartRing extends AbstractChart<PieChartProps, PieChartState> {
   }
 }
 
+// Generates the "Pie Ring" in order to meet the design spec
+// Equivalent of 'Pie' exported from paths.js, will refactor / move later on
 export function genPaths(
   data: Array<any>,
   accessor: string,
@@ -181,34 +168,36 @@ export function genPaths(
   R: number,
   compute
 ) {
-  // const accessor = x => x["total"];
-  // const data = [
-  //   { category: "one", total: 25 },
-  //   { category: "two", total: 25 },
-  //   { category: "three", total: 25 },
-  //   { category: "four", total: 25 }
-  // ];
-  // console.log("data ", data);
-  // console.log("accessor ", accessor);
   let values = data.map(item => item[accessor]);
-  console.log("values ", values);
-  // const center = [200, 200];
-  // const compute = {};
   let s = sum(values);
+  // console.log("original sum: ", s.toLocaleString());
   const onepercent = s / 100;
-  if (values.some(item => item < onepercent * 3)) {
+  // 3% seems like a safe bet for things getting too small to observe
+  const THRESHOLD = onepercent * 3;
+  let below = (x, t) => {
+    return x < t && x > 0;
+  };
+  // Assuming the 3% from above, let's not pull from a category
+  // unless it's got more than 7% so things don't get jacked up
+  let above = (x, t) => {
+    return x > t * 2.5;
+  };
+  if (values.some(item => below(item, THRESHOLD))) {
+    const belowcount = values.filter(x => below(x, THRESHOLD)).length;
+    const safecount = values.filter(x => above(x, THRESHOLD)).length;
+
     values = values.map(item => {
-      if (item > onepercent * 3) {
-        item = item - onepercent;
-      } else {
-        item = item + onepercent * 4;
+      if (above(item, THRESHOLD)) {
+        item -= onepercent * belowcount;
+      } else if (below(item, THRESHOLD)) {
+        item += onepercent * safecount;
       }
       return item;
     });
+
+    // console.log("values after remap: ", sum(values).toLocaleString());
   }
-  console.log("updated values", values);
   s = s === 0 ? 1 : s;
-  console.log("sum of values ", s);
   let scale = linear([0, s], [0, 2 * Math.PI], 10);
   let paths = [];
   let t = 0;
@@ -235,13 +224,14 @@ export function genPaths(
   return { paths };
 }
 
+// All ripped from paths.js.
+// Will clean up / properly import later
+
 export function linear([a, b], [c, d], offset = 0) {
   let f = x => {
-    // console.log("linear x ", x);
     return c + ((d - c) * (x - a)) / (b - a);
   };
 
-  // f.inverse = () => linear([c, d], [a, b])
   return f;
 }
 

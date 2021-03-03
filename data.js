@@ -52,8 +52,9 @@ const pieChartData = [
     legendFontSize: 15
   },
   {
+    // For the sake of testing, cranked a datapoint down below 1%
     name: "Beijing",
-    population: 527612,
+    population: 50000,
     color: "green",
     legendFontColor: "#7F7F7F",
     legendFontSize: 15

@@ -32,8 +32,7 @@ export declare function genPaths(
 };
 export declare function linear(
   [a, b]: [any, any],
-  [c, d]: [any, any],
-  offset?: number
+  [c, d]: [any, any]
 ): (x: any) => any;
 export declare function plus([a, b]: [any, any], [c, d]: [any, any]): any[];
 export declare function times(k: any, [a, b]: [any, any]): number[];

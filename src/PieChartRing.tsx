@@ -172,13 +172,14 @@ export function genPaths(
   let s = sum(values);
   // console.log("original sum: ", s.toLocaleString());
   const onepercent = s / 100;
-  // 3% seems like a safe bet for things getting too small to observe
-  const THRESHOLD = onepercent * 3;
+  const threepercent = onepercent * 3;
+  // 5% seems like a safe bet for things getting too small to observe
+  const THRESHOLD = onepercent * 5;
   let below = (x, t) => {
     return x < t && x > 0;
   };
-  // Assuming the 3% from above, let's not pull from a category
-  // unless it's got more than 7% so things don't get jacked up
+  // Assuming the 5% from above, let's not pull from a category
+  // unless it's got more than 15% so things don't get jacked up
   let above = (x, t) => {
     return x > t * 2.5;
   };
@@ -188,17 +189,17 @@ export function genPaths(
 
     values = values.map(item => {
       if (above(item, THRESHOLD)) {
-        item -= onepercent * belowcount;
+        // Split the 3% reduction (per outlier) among the available segments
+        item -= (threepercent * belowcount) / safecount;
       } else if (below(item, THRESHOLD)) {
-        item += onepercent * safecount;
+        // Add 3% to the outliers
+        item += threepercent;
       }
       return item;
     });
-
-    // console.log("values after remap: ", sum(values).toLocaleString());
   }
   s = s === 0 ? 1 : s;
-  let scale = linear([0, s], [0, 2 * Math.PI], 10);
+  let scale = linear([0, s], [0, 2 * Math.PI]);
   let paths = [];
   let t = 0;
   let offset = 0.1;
@@ -213,11 +214,11 @@ export function genPaths(
           r: 0,
           R: 100,
           start: scale(t) + offset,
-          end: scale(t + value) - offset,
-          offset: offset
+          end: scale(t + value) - offset
         })
       })
     );
+    // Starting point of next segment
     t += value;
   });
 
@@ -227,7 +228,7 @@ export function genPaths(
 // All ripped from paths.js.
 // Will clean up / properly import later
 
-export function linear([a, b], [c, d], offset = 0) {
+export function linear([a, b], [c, d]) {
   let f = x => {
     return c + ((d - c) * (x - a)) / (b - a);
   };

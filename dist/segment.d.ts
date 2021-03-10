@@ -3,15 +3,13 @@ export default function({
   r,
   R,
   start,
-  end,
-  offset
+  end
 }: {
   center: any;
   r: any;
   R: any;
   start: any;
   end: any;
-  offset: any;
 }): {
   path: any;
 };

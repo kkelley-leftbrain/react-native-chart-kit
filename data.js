@@ -39,40 +39,45 @@ const contributionData = [
 const pieChartData = [
   {
     name: "Seoul",
-    population: 21500000,
+    // population: 21500000,
+    population: -122,
     color: "rgba(131, 167, 234, 1)",
     legendFontColor: "#7F7F7F",
     legendFontSize: 15
   },
   {
     name: "Toronto",
-    population: 2800000,
+    // population: 2800000,
+    population: -416,
     color: "#F00",
     legendFontColor: "#7F7F7F",
     legendFontSize: 15
   },
   {
     name: "New York",
-    population: 8538000,
+    // population: 8538000,
+    population: -10830,
     color: "#ffffff",
     legendFontColor: "#7F7F7F",
     legendFontSize: 15
-  },
-  {
-    name: "Moscow",
-    population: 11920000,
-    color: "rgb(0, 0, 255)",
-    legendFontColor: "#7F7F7F",
-    legendFontSize: 15
-  },
-  {
-    // For the sake of testing, cranked a datapoint down below 1%
-    name: "Beijing",
-    population: 50000,
-    color: "green",
-    legendFontColor: "#7F7F7F",
-    legendFontSize: 15
   }
+  // {
+  //   name: "Moscow",
+  //   // population: 11920000,
+  //   population: -36,
+  //   color: "rgb(0, 0, 255)",
+  //   legendFontColor: "#7F7F7F",
+  //   legendFontSize: 15
+  // },
+  // {
+  //   // For the sake of testing, cranked a datapoint down below 1%
+  //   name: "Beijing",
+  //   // population: 50000,
+  //   population: -44,
+  //   color: "green",
+  //   legendFontColor: "#7F7F7F",
+  //   legendFontSize: 15
+  // }
 ];
 
 // Mock data object for Progress

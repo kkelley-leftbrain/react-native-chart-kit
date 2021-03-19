@@ -168,9 +168,8 @@ export function genPaths(
   R: number,
   compute
 ) {
-  let values = data.map(item => item[accessor]);
+  let values = data.map(item => Math.abs(item[accessor]));
   let s = sum(values);
-  // console.log("original sum: ", s.toLocaleString());
   const onepercent = s / 100;
   const threepercent = onepercent * 3;
   // 5% seems like a safe bet for things getting too small to observe

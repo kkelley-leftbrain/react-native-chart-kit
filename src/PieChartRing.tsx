@@ -51,8 +51,8 @@ class PieChartRing extends AbstractChart<PieChartProps, PieChartState> {
       this.props.height / 2.5, //R
       {}
     );
-    const total = this.props.data.reduce((sum, item) => {
-      return sum + item[this.props.accessor];
+    const total = this.props.data.reduce((acc, item) => {
+      return acc + item[this.props.accessor];
     }, 0);
 
     const paths = chart.paths.map((c, i) => {
@@ -178,25 +178,47 @@ export function genPaths(
   let below = (x, t) => {
     return x < t && x > 0;
   };
+
+  // These are awkard. Smaller display values but not enough to repeatedly
+  // take from
+  let between = (x, t) => {
+    return x >= t && x < t * 3;
+  };
+
   // Assuming the 5% from above, let's not pull from a category
   // unless it's got more than 15% so things don't get jacked up
   let above = (x, t) => {
-    return x > t * 2.5;
+    return x > t * 3;
   };
   if (values.some(item => below(item, THRESHOLD))) {
     const belowcount = values.filter(x => below(x, THRESHOLD)).length;
     const safecount = values.filter(x => above(x, THRESHOLD)).length;
+    if (values.some(item => between(item, THRESHOLD))) {
+      // these are a bunch of 5-15% bastards.
+      const awkwardcount = values.filter(x => between(x, THRESHOLD)).length;
 
-    values = values.map(item => {
-      if (above(item, THRESHOLD)) {
-        // Split the 3% reduction (per outlier) among the available segments
-        item -= (threepercent * belowcount) / safecount;
-      } else if (below(item, THRESHOLD)) {
-        // Add 3% to the outliers
-        item += threepercent;
-      }
-      return item;
-    });
+      values = values.map(item => {
+        if (above(item, THRESHOLD)) {
+          // Reduce for both below and between values
+          item -= (threepercent * (belowcount + awkwardcount)) / safecount;
+        } else if (below(item, THRESHOLD) || between(item, THRESHOLD)) {
+          // Add 3% to both below and between values
+          item += threepercent;
+        }
+        return item;
+      });
+    } else {
+      values = values.map(item => {
+        if (above(item, THRESHOLD)) {
+          // Split the 3% reduction (per outlier) among the available segments
+          item -= (threepercent * belowcount) / safecount;
+        } else if (below(item, THRESHOLD)) {
+          // Add 3% to the outliers
+          item += threepercent;
+        }
+        return item;
+      });
+    }
   }
   s = s === 0 ? 1 : s;
   let scale = linear([0, s], [0, 2 * Math.PI]);

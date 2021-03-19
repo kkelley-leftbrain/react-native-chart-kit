@@ -143,36 +143,7 @@ export default class App extends React.Component {
                 backgroundColor="transparent"
                 paddingLeft="15"
               />
-              <Text style={labelStyle}>Bezier Line Chart</Text>
-              <LineChart
-                bezier
-                data={data}
-                width={width}
-                height={height}
-                yAxisLabel="$"
-                yAxisSuffix="k"
-                chartConfig={chartConfig}
-                style={graphStyle}
-                verticalLabelRotation={20}
-                onDataPointClick={({ value, getColor }) =>
-                  showMessage({
-                    message: `${value}`,
-                    description: "You selected this value",
-                    backgroundColor: getColor(0.9)
-                  })
-                }
-                formatXLabel={label => label.toUpperCase()}
-              />
-              <FlashMessage duration={1000} />
-              <Text style={labelStyle}>Progress Chart</Text>
-              <ProgressChart
-                data={progressChartData}
-                width={width}
-                height={height}
-                chartConfig={chartConfig}
-                style={graphStyle}
-                hideLegend={false}
-              />
+
               <Text style={labelStyle}>Bar Graph</Text>
               <BarChart
                 width={width}
@@ -211,6 +182,36 @@ export default class App extends React.Component {
                 height={220}
                 chartConfig={chartConfig}
                 percentile
+              />
+              <Text style={labelStyle}>Bezier Line Chart</Text>
+              <LineChart
+                bezier
+                data={data}
+                width={width}
+                height={height}
+                yAxisLabel="$"
+                yAxisSuffix="k"
+                chartConfig={chartConfig}
+                style={graphStyle}
+                verticalLabelRotation={20}
+                onDataPointClick={({ value, getColor }) =>
+                  showMessage({
+                    message: `${value}`,
+                    description: "You selected this value",
+                    backgroundColor: getColor(0.9)
+                  })
+                }
+                formatXLabel={label => label.toUpperCase()}
+              />
+              <FlashMessage duration={1000} />
+              <Text style={labelStyle}>Progress Chart</Text>
+              <ProgressChart
+                data={progressChartData}
+                width={width}
+                height={height}
+                chartConfig={chartConfig}
+                style={graphStyle}
+                hideLegend={false}
               />
               <Text style={labelStyle}>Line Chart</Text>
               <LineChart

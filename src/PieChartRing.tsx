@@ -38,8 +38,8 @@ class PieChartRing extends AbstractChart<PieChartProps, PieChartState> {
     const debug = this.props.debug || false;
     if (debug) {
       console.log(
-        "Data passed to pie: ",
-        JSON.stringify(this.props.data, null, "\t")
+        "Data passed to pie crust: ",
+        JSON.stringify(this.props.data, null, " ")
       );
     }
 
